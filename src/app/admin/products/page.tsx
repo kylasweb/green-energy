@@ -30,7 +30,6 @@ import {
   Upload,
   Download,
   Archive,
-  Unarchive,
   Star,
   X,
   ImageIcon
@@ -256,22 +255,25 @@ export default function AdminProducts() {
     setIsDialogOpen(true)
   }
 
-  const handleEditProduct = (product: Product) => {
-    setEditingProduct(product)
-    setFormData({
-      name: product.name,
-      description: product.description,
-      sku: product.sku,
-      price: product.price,
-      mrp: product.mrp,
-      stockQuantity: product.stockQuantity,
-      lowStockThreshold: product.lowStockThreshold,
-      category: product.category,
-      brand: product.brand,
-      isActive: product.isActive,
-      isFeatured: product.isFeatured
-    })
-    setIsDialogOpen(true)
+  const handleEditProduct = (productId: string) => {
+    const productToEdit = products.find(p => p.id === productId)
+    if (productToEdit) {
+      setEditingProduct(productToEdit)
+      setFormData({
+        name: productToEdit.name,
+        description: productToEdit.description,
+        sku: productToEdit.sku,
+        price: productToEdit.price,
+        mrp: productToEdit.mrp,
+        stockQuantity: productToEdit.stockQuantity,
+        lowStockThreshold: productToEdit.lowStockThreshold,
+        category: productToEdit.category,
+        brand: productToEdit.brand,
+        isActive: productToEdit.isActive,
+        isFeatured: productToEdit.isFeatured
+      })
+      setIsDialogOpen(true)
+    }
   }
 
   const handleSaveProduct = () => {
@@ -418,7 +420,7 @@ export default function AdminProducts() {
         lowStockThreshold: clonedProduct.lowStockThreshold,
         category: clonedProduct.category,
         brand: clonedProduct.brand,
-        images: clonedProduct.copyImages ? product.images : [],
+        images: clonedProduct.copyImages ? products.find(p => p.id === clonedProduct.id)?.images : [],
         tags: clonedProduct.tags,
         isActive: clonedProduct.isActive,
         isFeatured: clonedProduct.isFeatured,
@@ -810,7 +812,7 @@ export default function AdminProducts() {
         onExport={() => alert("Export functionality coming soon")}
         onRefresh={() => window.location.reload()}
         onFilter={() => alert("Filter functionality coming soon")}
-        onSearch={() => document.querySelector('input[placeholder*="Search"]')?.focus()}
+        onSearch={() => (document.querySelector('input[placeholder*="Search"]') as HTMLInputElement)?.focus()}
         customActions={[
           {
             label: "Low Stock",

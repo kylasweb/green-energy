@@ -222,7 +222,7 @@ export default function EnhancedInlineEdit({
             }}
             disabled={isSaving}
           >
-            <SelectTrigger ref={inputRef as React.RefObject<HTMLDivElement>} className="min-w-[200px]">
+            <SelectTrigger ref={inputRef as React.RefObject<HTMLButtonElement>} className="min-w-[200px]">
               <SelectValue placeholder={placeholder} />
             </SelectTrigger>
             <SelectContent>

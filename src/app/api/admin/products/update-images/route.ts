@@ -1,5 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
+interface Product {
+  id: string
+  name: string
+  slug: string
+  description: string
+  sku: string
+  price: number
+  mrp: number
+  stockQuantity: number
+  lowStockThreshold: number
+  category: string
+  brand: string
+  images?: string[]
+  tags?: string[]
+  isActive: boolean
+  isFeatured: boolean
+  createdAt: string
+  updatedAt: string
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -46,7 +65,7 @@ export async function PUT(request: NextRequest) {
       )
     }
 
-    const updatedProducts = []
+    const updatedProducts: Product[] = []
     
     for (const productId of productIds) {
       // Get product details

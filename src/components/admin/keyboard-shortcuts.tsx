@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -190,9 +190,9 @@ export default function KeyboardShortcuts({
   const categories = Array.from(new Set(shortcuts.map(s => s.category)))
 
   const formatKey = (key: string) => {
-    return key.split(" + ").map(part => (
-      <kbd key={part} className="px-2 py-1 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded">
-        {part}
+    return key.split(" + ").map((part, index) => (
+      <kbd key={part + index} className="px-2 py-1 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded">
+        {part as React.ReactNode}
       </kbd>
     )).reduce((acc, curr) => (
       <>
@@ -200,7 +200,7 @@ export default function KeyboardShortcuts({
         <span className="mx-1">+</span>
         {curr}
       </>
-    ))
+    )) as React.ReactNode;
   }
 
   return (

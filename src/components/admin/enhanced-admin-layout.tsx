@@ -81,6 +81,7 @@ interface EnhancedAdminLayoutProps {
   children: React.ReactNode
   autoSaveData?: any
   onAutoSave?: (data: any) => Promise<void>
+  onAddProductClick?: () => void
 }
 
 interface AdminUser {
@@ -92,9 +93,10 @@ interface AdminUser {
 }
 
 export default function EnhancedAdminLayout({ 
-  children, 
-  autoSaveData, 
-  onAutoSave 
+  children,
+  autoSaveData,
+  onAutoSave,
+  onAddProductClick
 }: EnhancedAdminLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [adminUser, setAdminUser] = useState<AdminUser | null>(null)
@@ -138,8 +140,14 @@ export default function EnhancedAdminLayout({
     // Determine what "new" means based on current page
     if (pathname.includes("/products")) {
       // Trigger add product
-      const addButton = document.querySelector('button:has(.lucide-plus)')
-      addButton?.click()
+      const addButton = document.evaluate(
+        "//button[contains(., 'Add Product')]",
+        document,
+        null,
+        XPathResult.FIRST_ORDERED_NODE_TYPE,
+        null
+      ).singleNodeValue as HTMLButtonElement;
+      addButton?.click();
     } else if (pathname.includes("/orders")) {
       // Trigger add order
       console.log("Add order")

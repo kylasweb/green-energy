@@ -450,7 +450,7 @@ export default function ProductPage() {
                             <li key={index}>{feature}</li>
                           ))
                         : Object.entries(product.features).map(([key, value]) => (
-                            <li key={key}>{key}: {value}</li>
+                            <li key={key}>{key}: {value as React.ReactNode}</li>
                           ))
                       }
                     </ul>
@@ -466,7 +466,7 @@ export default function ProductPage() {
                   {Object.entries(product.specifications).map(([key, value]) => (
                     <div key={key} className="flex justify-between py-2 border-b">
                       <span className="font-medium text-gray-700">{key}</span>
-                      <span className="text-gray-600">{value}</span>
+                      <span className="text-gray-600">{value as React.ReactNode}</span>
                     </div>
                   ))}
                 </div>
@@ -481,7 +481,7 @@ export default function ProductPage() {
                     {Object.entries(product.dimensions).map(([key, value]) => (
                       <div key={key} className="flex justify-between py-2 border-b">
                         <span className="font-medium text-gray-700">{key}</span>
-                        <span className="text-gray-600">{value}</span>
+                        <span className="text-gray-600">{value as React.ReactNode}</span>
                       </div>
                     ))}
                   </div>

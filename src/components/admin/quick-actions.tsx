@@ -35,7 +35,7 @@ interface QuickActionsProps {
   customActions?: {
     label: string
     icon: React.ReactNode
-    onClick: () => void
+    onClick?: () => void
     badge?: string
     variant?: "default" | "outline" | "ghost"
   }[]
@@ -73,54 +73,62 @@ export default function QuickActions({
     }
   }
 
-  const defaultActions = [
+  const defaultActions: QuickActionsProps['customActions'] = [
     {
       label: "Add New",
       icon: <Plus className="h-4 w-4" />,
-      onClick: onAdd,
-      variant: "default" as const
+      onClick: onAdd || undefined,
+      variant: "default" as const,
+      badge: undefined
     },
     {
       label: "Import",
       icon: <Upload className="h-4 w-4" />,
-      onClick: onImport,
-      variant: "outline" as const
+      onClick: onImport || undefined,
+      variant: "outline" as const,
+      badge: undefined
     },
     {
       label: "Export",
       icon: <Download className="h-4 w-4" />,
-      onClick: onExport,
-      variant: "outline" as const
+      onClick: onExport || undefined,
+      variant: "outline" as const,
+      badge: undefined
     },
     {
       label: "Refresh",
       icon: <RefreshCw className="h-4 w-4" />,
-      onClick: onRefresh,
-      variant: "outline" as const
+      onClick: onRefresh || undefined,
+      variant: "outline" as const,
+      badge: undefined
     },
     {
       label: "Filter",
       icon: <Filter className="h-4 w-4" />,
-      onClick: onFilter,
-      variant: "outline" as const
+      onClick: onFilter || undefined,
+      variant: "outline" as const,
+      badge: undefined
     },
     {
       label: "Search",
       icon: <Search className="h-4 w-4" />,
-      onClick: onSearch,
-      variant: "outline" as const
+      onClick: onSearch || undefined,
+      variant: "outline" as const,
+      badge: undefined
     },
     {
       label: "Settings",
       icon: <Settings className="h-4 w-4" />,
-      onClick: onSettings,
-      variant: "outline" as const
+      onClick: onSettings || undefined,
+      variant: "outline" as const,
+      badge: undefined
     },
     {
       label: "Analytics",
       icon: <BarChart3 className="h-4 w-4" />,
-      onClick: onAnalytics,
-      variant: "outline" as const
+      onClick: onAnalytics || undefined,
+      variant: "outline" as const,
+      badge: undefined
     }
   ]
 
