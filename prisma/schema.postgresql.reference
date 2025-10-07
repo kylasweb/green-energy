@@ -1,5 +1,13 @@
-// Alternative Prisma schema for PostgreSQL production deployment
-// Use this for Vercel/Netlify deployment with PostgreSQL
+// PostgreSQL Schema Reference for Production Deployment
+// 
+// This is a reference file for PostgreSQL deployment.
+// DO NOT rename to .prisma extension as it will conflict with the main schema.
+// 
+// Usage:
+// - The migrate-to-postgres.js script will automatically use this file
+// - Or manually copy contents to schema.prisma when deploying to production
+// 
+// This schema is optimized for Vercel/Netlify deployment with PostgreSQL
 
 generator client {
     provider = "prisma-client-js"

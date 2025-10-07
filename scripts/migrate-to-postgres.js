@@ -38,11 +38,19 @@ async function runMigration() {
     // Step 1: Update schema to use PostgreSQL
     console.log('🔄 Step 1: Updating Prisma schema...');
     const schemaPath = path.join(__dirname, '../prisma/schema.prisma');
-    let schema = fs.readFileSync(schemaPath, 'utf8');
+    const postgresReferencePath = path.join(__dirname, '../prisma/schema.postgresql.reference');
     
-    // Replace SQLite with PostgreSQL
-    schema = schema.replace(/provider\s*=\s*"sqlite"/, 'provider = "postgresql"');
-    fs.writeFileSync(schemaPath, schema);
+    // Check if PostgreSQL reference exists
+    if (fs.existsSync(postgresReferencePath)) {
+      console.log('📋 Using PostgreSQL schema reference...');
+      const postgresSchema = fs.readFileSync(postgresReferencePath, 'utf8');
+      fs.writeFileSync(schemaPath, postgresSchema);
+    } else {
+      // Fallback: Replace SQLite with PostgreSQL in current schema
+      let schema = fs.readFileSync(schemaPath, 'utf8');
+      schema = schema.replace(/provider\s*=\s*"sqlite"/, 'provider = "postgresql"');
+      fs.writeFileSync(schemaPath, schema);
+    }
     console.log('✅ Schema updated to PostgreSQL\n');
 
     // Step 2: Generate Prisma client
