@@ -5,6 +5,7 @@ A comprehensive e-commerce platform specializing in green energy products with a
 ## ✨ Key Features
 
 ### 💳 Advanced Payment System
+
 - **🏦 Multi-Gateway UPI Integration** - Razorpay, PayU, PhonePe, GPay support
 - **� Secure Payment Processing** - AES-256 encrypted credential storage
 - **💰 Transaction Management** - Real-time status tracking, refunds, analytics
@@ -12,6 +13,7 @@ A comprehensive e-commerce platform specializing in green energy products with a
 - **📊 Payment Analytics** - Comprehensive transaction reporting
 
 ### 🛍️ E-Commerce Features
+
 - **🛒 Shopping Cart** - Persistent cart with context management
 - **📦 Product Catalog** - Categories, brands, detailed product pages
 - **👥 User Management** - Authentication, profiles, order history
@@ -19,6 +21,7 @@ A comprehensive e-commerce platform specializing in green energy products with a
 - **💼 Admin Dashboard** - Product management, user administration
 
 ### 🎯 Core Technology Stack
+
 - **⚡ Next.js 15** - React framework with App Router
 - **� TypeScript 5** - Full type safety across the application
 - **� Tailwind CSS** - Modern, responsive UI design
@@ -26,6 +29,7 @@ A comprehensive e-commerce platform specializing in green energy products with a
 - **🔐 NextAuth.js** - Secure authentication system
 
 ### 🧩 UI Components & Styling
+
 - **🧩 shadcn/ui** - Professional component library
 - **🎯 Lucide React** - Consistent iconography
 - **� Responsive Design** - Mobile-first approach
@@ -34,6 +38,7 @@ A comprehensive e-commerce platform specializing in green energy products with a
 ## � UPI Payment Gateway System
 
 ### Gateway Integration
+
 ```typescript
 // Supported Payment Gateways
 - Razorpay (Primary)
@@ -44,14 +49,16 @@ A comprehensive e-commerce platform specializing in green energy products with a
 ```
 
 ### Security Features
+
 - **🔒 Encrypted Credentials** - All sensitive data encrypted with AES-256
 - **🛡️ Role-Based Access** - Admin-only gateway management
 - **✅ Transaction Validation** - Real-time payment verification
 - **� Webhook Security** - Secure webhook handling with signature verification
 
 ### Admin UPI Management
+
 - **⚙️ Gateway Configuration** - Easy setup and management of payment providers
-- **💳 VPA Administration** - Manage user virtual payment addresses  
+- **💳 VPA Administration** - Manage user virtual payment addresses
 - **� Transaction Dashboard** - Real-time payment monitoring
 - **🔄 Refund Processing** - Automated refund capabilities
 
@@ -112,6 +119,7 @@ ADMIN_PASSWORD="your-admin-password"
 3. **UPI Management**: Configure payment gateways in Admin > UPI Settings
 
 ### Default Admin Features
+
 - **Product Management** - Add, edit, delete products and categories
 - **Order Management** - View and process customer orders
 - **User Management** - Manage customer accounts
@@ -156,6 +164,7 @@ ADMIN_PASSWORD="your-admin-password"
 ## �️ E-Commerce Features
 
 ### 🏪 Customer Features
+
 - **Product Browsing** - Category-wise product listing with search
 - **Shopping Cart** - Persistent cart with quantity management
 - **User Accounts** - Registration, login, profile management
@@ -163,6 +172,7 @@ ADMIN_PASSWORD="your-admin-password"
 - **Payment Options** - Multiple UPI gateways for secure payments
 
 ### 👨‍💼 Admin Features
+
 - **Dashboard** - Overview of sales, orders, and analytics
 - **Product Management** - CRUD operations for products and categories
 - **Order Management** - Process and update order statuses
@@ -170,6 +180,7 @@ ADMIN_PASSWORD="your-admin-password"
 - **UPI Gateway Setup** - Configure and manage payment providers
 
 ### � Payment Gateway Management
+
 - **Multi-Provider Support** - Razorpay, PayU, PhonePe, GPay
 - **Secure Configuration** - Encrypted storage of API credentials
 - **Transaction Monitoring** - Real-time payment status tracking
@@ -177,6 +188,7 @@ ADMIN_PASSWORD="your-admin-password"
 - **Webhook Handling** - Secure payment confirmation processing
 
 ### 🔐 Security & Performance
+
 - **Data Encryption** - AES-256 encryption for sensitive data
 - **Role-Based Access** - Admin and customer role separation
 - **Type Safety** - Full TypeScript implementation
@@ -185,12 +197,14 @@ ADMIN_PASSWORD="your-admin-password"
 ## 🛠️ Development Workflow
 
 ### Adding New Payment Gateways
+
 1. Create gateway implementation in `src/lib/gateways/`
 2. Update UPI service to include new provider
 3. Add gateway configuration in admin panel
 4. Test payment flow with sandbox credentials
 
 ### Database Updates
+
 ```bash
 # After modifying prisma/schema.prisma
 npx prisma generate
@@ -201,6 +215,7 @@ npx prisma migrate deploy
 ```
 
 ### API Routes Structure
+
 - **`/api/admin/upi/settings`** - CRUD operations for UPI gateway settings
 - **`/api/payments/upi/initiate`** - Start payment process
 - **`/api/payments/upi/status`** - Check payment status
@@ -209,12 +224,14 @@ npx prisma migrate deploy
 ## 🚀 Deployment
 
 ### Environment Setup
+
 1. Configure production database URL
 2. Set up payment gateway production credentials
 3. Configure NextAuth secret and URL
 4. Set admin credentials for initial setup
 
 ### Build & Deploy
+
 ```bash
 npm run build
 npm start
