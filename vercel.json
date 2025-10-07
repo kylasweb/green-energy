@@ -1,0 +1,15 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
+  "functions": {
+    "app/api/**/*.ts": {
+      "runtime": "nodejs18.x"
+    }
+  },
+  "regions": ["cle1", "iad1"],
+  "crons": [{
+    "path": "/api/health",
+    "schedule": "0 */6 * * *"
+  }]
+}
