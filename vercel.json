@@ -10,6 +10,6 @@
   "regions": ["cle1", "iad1"],
   "crons": [{
     "path": "/api/health",
-    "schedule": "0 */6 * * *"
+    "schedule": "0 6 * * *"
   }]
 }
