@@ -7,7 +7,8 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "prebuild": "prisma generate",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "db:push": "prisma db push",
@@ -22,6 +23,7 @@
     "seed:admin": "node scripts/seed-admin-cjs.js",
     "seed:products": "node scripts/seed-products.js",
     "setup:production": "npm run deploy:env && npm run deploy:migrate && npm run deploy:setup",
+    "vercel:build": "prisma generate && next build",
     "vercel:deploy": "vercel --prod",
     "netlify:deploy": "npm run build && netlify deploy --prod --dir=.next"
   },
