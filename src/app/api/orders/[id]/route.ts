@@ -5,16 +5,17 @@ import { authOptions } from '@/lib/auth'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
-    const { id } = params
+    const resolvedParams = await params
+    const { id } = resolvedParams
 
     const order = await db.order.findFirst({
       where: {
         id: id,
-        ...(session?.user 
+        ...(session?.user
           ? { userId: session.user.id }
           : { sessionId: request.cookies.get('sessionId')?.value }
         )
@@ -25,7 +26,7 @@ export async function GET(
             product: true
           }
         },
-        shipment: true
+        shipments: true
       }
     })
 

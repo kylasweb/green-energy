@@ -24,7 +24,7 @@ interface CheckoutData {
     pincode: string
     country: string
   }
-  paymentMethod: 'cod' | 'online'
+  paymentMethod: 'cod' | 'online' | 'upi'
   notes?: string
 }
 
@@ -106,16 +106,21 @@ export async function POST(request: NextRequest) {
       data: {
         orderNumber,
         userId: session?.user?.id || null,
-        sessionId: session?.user?.id ? null : request.cookies.get('sessionId')?.value,
-        status: 'pending',
+        status: 'PENDING',
         subtotal,
         shipping,
         tax,
         total,
         paymentMethod: body.paymentMethod,
         notes: body.notes || '',
-        shippingAddress: body.shippingAddress,
-        billingAddress: body.billingAddress || body.shippingAddress,
+        customerEmail: body.shippingAddress.email,
+        customerName: body.shippingAddress.fullName,
+        customerPhone: body.shippingAddress.phone,
+        customerAddress: body.shippingAddress.address,
+        customerCity: body.shippingAddress.city,
+        customerState: body.shippingAddress.state,
+        customerCountry: body.shippingAddress.country,
+        customerZipCode: body.shippingAddress.pincode,
         orderItems: {
           create: cartItems.map(item => ({
             productId: item.productId,
@@ -161,9 +166,8 @@ export async function POST(request: NextRequest) {
     await db.shipment.create({
       data: {
         orderId: order.id,
-        status: 'pending',
-        trackingNumber: null,
-        estimatedDelivery: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days from now
+        status: 'PENDING',
+        trackingNumber: null
       }
     })
 

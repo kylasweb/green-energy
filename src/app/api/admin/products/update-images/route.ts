@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     // Update product with new images
     const updatedProduct = await db.product.update({
       where: { id: productId },
-      data: { 
+      data: {
         images: images,
         updatedAt: new Date()
       }
@@ -66,7 +66,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const updatedProducts: Product[] = []
-    
+
     for (const productId of productIds) {
       // Get product details
       const product = await db.product.findUnique({
@@ -94,17 +94,21 @@ export async function PUT(request: NextRequest) {
 
       if (searchResponse.ok) {
         const searchData = await searchResponse.json()
-        
+
         // Update product with first image found
         if (searchData.images && searchData.images.length > 0) {
           const updatedProduct = await db.product.update({
             where: { id: productId },
-            data: { 
+            data: {
               images: [searchData.images[0]],
               updatedAt: new Date()
+            },
+            include: {
+              category: true,
+              brand: true
             }
           })
-          updatedProducts.push(updatedProduct)
+          updatedProducts.push(updatedProduct as any)
         }
       }
     }

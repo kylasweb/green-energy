@@ -22,10 +22,12 @@ import {
   Mail,
   Loader2,
   ArrowLeft,
-  ArrowRight
+  ArrowRight,
+  Smartphone
 } from "lucide-react"
 import { useCart } from "@/contexts/cart-context"
 import { toast } from "sonner"
+import UpiPayment from "@/components/payments/upi-payment"
 
 interface Address {
   fullName: string
@@ -70,8 +72,10 @@ export default function CheckoutPage() {
   })
   
   const [sameAsShipping, setSameAsShipping] = useState(true)
-  const [paymentMethod, setPaymentMethod] = useState<'cod' | 'online'>('cod')
+  const [paymentMethod, setPaymentMethod] = useState<'cod' | 'online' | 'upi'>('cod')
   const [notes, setNotes] = useState('')
+  const [orderId, setOrderId] = useState<string | null>(null)
+  const [showUpiPayment, setShowUpiPayment] = useState(false)
 
   useEffect(() => {
     fetchCart()
@@ -139,13 +143,31 @@ export default function CheckoutPage() {
         throw new Error(data.error || 'Failed to place order')
       }
 
-      toast.success('Order placed successfully!')
-      router.push(`/order-confirmation?orderId=${data.order.id}`)
+      // For UPI payments, show payment component
+      if (paymentMethod === 'upi') {
+        setOrderId(data.order.id)
+        setShowUpiPayment(true)
+        toast.success('Order created! Please complete the UPI payment.')
+      } else {
+        toast.success('Order placed successfully!')
+        router.push(`/order-confirmation?orderId=${data.order.id}`)
+      }
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Failed to place order')
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleUpiSuccess = (transactionId: string) => {
+    toast.success('Payment successful!')
+    router.push(`/order-confirmation?orderId=${orderId}`)
+  }
+
+  const handleUpiCancel = () => {
+    setShowUpiPayment(false)
+    setOrderId(null)
+    toast.info('Payment cancelled. Your order is saved and you can complete payment later.')
   }
 
   if (state.loading && state.items.length === 0) {
@@ -341,7 +363,7 @@ export default function CheckoutPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <RadioGroup value={paymentMethod} onValueChange={(value) => setPaymentMethod(value as 'cod' | 'online')}>
+                  <RadioGroup value={paymentMethod} onValueChange={(value) => setPaymentMethod(value as 'cod' | 'online' | 'upi')}>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="cod" id="cod" />
                       <Label htmlFor="cod" className="flex items-center gap-2 cursor-pointer">
@@ -354,6 +376,17 @@ export default function CheckoutPage() {
                     </p>
                     
                     <div className="flex items-center space-x-2 mt-4">
+                      <RadioGroupItem value="upi" id="upi" />
+                      <Label htmlFor="upi" className="flex items-center gap-2 cursor-pointer">
+                        <Smartphone className="h-4 w-4" />
+                        UPI Payment
+                      </Label>
+                    </div>
+                    <p className="text-sm text-gray-600 ml-6">
+                      Pay instantly using your UPI ID (GPay, PhonePe, Paytm, etc.)
+                    </p>
+                    
+                    <div className="flex items-center space-x-2 mt-4">
                       <RadioGroupItem value="online" id="online" />
                       <Label htmlFor="online" className="flex items-center gap-2 cursor-pointer">
                         <CreditCard className="h-4 w-4" />
@@ -361,7 +394,7 @@ export default function CheckoutPage() {
                       </Label>
                     </div>
                     <p className="text-sm text-gray-600 ml-6">
-                      Pay securely using credit/debit card, UPI, or net banking.
+                      Pay securely using credit/debit card or net banking.
                     </p>
                   </RadioGroup>
 
@@ -424,6 +457,11 @@ export default function CheckoutPage() {
                         <>
                           <Truck className="h-4 w-4" />
                           <span>Cash on Delivery</span>
+                        </>
+                      ) : paymentMethod === 'upi' ? (
+                        <>
+                          <Smartphone className="h-4 w-4" />
+                          <span>UPI Payment</span>
                         </>
                       ) : (
                         <>
@@ -556,6 +594,20 @@ export default function CheckoutPage() {
           </div>
         </div>
       </div>
+
+      {/* UPI Payment Dialog */}
+      {showUpiPayment && orderId && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="w-full max-w-lg">
+            <UpiPayment
+              orderId={orderId}
+              amount={state.totals.total}
+              onSuccess={handleUpiSuccess}
+              onCancel={handleUpiCancel}
+            />
+          </div>
+        </div>
+      )}
     </div>
   )
 }

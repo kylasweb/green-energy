@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
@@ -74,7 +74,7 @@ interface OrdersResponse {
   }
 }
 
-export default function OrdersPage() {
+function OrdersContent() {
   const searchParams = useSearchParams()
   const { data: session, status } = useSession()
   
@@ -418,5 +418,22 @@ export default function OrdersPage() {
         )}
       </div>
     </div>
+  )
+}
+
+export default function OrdersPage() {
+  return (
+    <Suspense fallback={
+      <div className="container mx-auto px-4 py-16">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Loading orders...</p>
+          </div>
+        </div>
+      </div>
+    }>
+      <OrdersContent />
+    </Suspense>
   )
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
@@ -70,7 +70,7 @@ interface Brand {
   productCount: number
 }
 
-export default function ProductsPage() {
+function ProductsContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { addToCart } = useCart()
@@ -603,5 +603,26 @@ export default function ProductsPage() {
       
       <Footer />
     </div>
+  )
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="container mx-auto px-4 py-16">
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="text-center">
+              <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
+              <p className="text-muted-foreground">Loading products...</p>
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    }>
+      <ProductsContent />
+    </Suspense>
   )
 }

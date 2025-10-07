@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
               product: true
             }
           },
-          shipment: true
+          shipments: true
         },
         orderBy: { createdAt: 'desc' },
         skip,

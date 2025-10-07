@@ -5,11 +5,12 @@ import { authOptions } from '@/lib/auth'
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
-    const { id } = params
+    const resolvedParams = await params
+    const { id } = resolvedParams
     const body = await request.json()
     const { quantity } = body
 
@@ -85,11 +86,12 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
-    const { id } = params
+    const resolvedParams = await params
+    const { id } = resolvedParams
 
     // Find the cart item
     const cartItem = await db.cartItem.findUnique({

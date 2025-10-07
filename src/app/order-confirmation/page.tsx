@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
@@ -74,7 +74,7 @@ interface Order {
   createdAt: string
 }
 
-export default function OrderConfirmationPage() {
+function OrderConfirmationContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const orderId = searchParams.get('orderId')
@@ -398,5 +398,22 @@ export default function OrderConfirmationPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function OrderConfirmationPage() {
+  return (
+    <Suspense fallback={
+      <div className="container mx-auto px-4 py-16">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center">
+            <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
+            <p className="text-muted-foreground">Loading order confirmation...</p>
+          </div>
+        </div>
+      </div>
+    }>
+      <OrderConfirmationContent />
+    </Suspense>
   )
 }

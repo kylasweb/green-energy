@@ -6,11 +6,7 @@ export async function POST(request: NextRequest) {
     // Get all products that don't have images or have empty images array
     const productsWithoutImages = await db.product.findMany({
       where: {
-        OR: [
-          { images: null },
-          { images: [] },
-          { images: '[]' }
-        ]
+        images: { equals: [] }
       },
       include: {
         brand: true,
@@ -37,20 +33,20 @@ export async function POST(request: NextRequest) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            brand: product.brand.name,
+            brand: (product as any).brand?.name || 'Unknown',
             productName: product.name,
-            category: product.category.name
+            category: (product as any).category?.name || 'Unknown'
           }),
         })
 
         if (searchResponse.ok) {
           const searchData = await searchResponse.json()
-          
+
           // Update product with first image found
           if (searchData.images && searchData.images.length > 0) {
             await db.product.update({
               where: { id: product.id },
-              data: { 
+              data: {
                 images: [searchData.images[0]],
                 updatedAt: new Date()
               }

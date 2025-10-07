@@ -3,11 +3,16 @@
 import Link from "next/link"
 import { useState } from "react"
 import { usePathname } from "next/navigation"
-import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { ShoppingCart, Search, User, Heart, Menu, X, Leaf } from "lucide-react"
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { ShoppingCart, Search, User, Heart, Menu, X, Leaf, Smartphone, Package, Settings } from "lucide-react"
 import { useCart } from "@/contexts/cart-context"
 
 export default function Header() {
@@ -103,9 +108,33 @@ export default function Header() {
               )}
             </div>
 
-            <Button variant="ghost" size="icon">
-              <User className="h-5 w-5" />
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <User className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem asChild>
+                  <Link href="/orders" className="flex items-center gap-2">
+                    <Package className="h-4 w-4" />
+                    My Orders
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/profile/upi" className="flex items-center gap-2">
+                    <Smartphone className="h-4 w-4" />
+                    Manage UPI IDs
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/profile/settings" className="flex items-center gap-2">
+                    <Settings className="h-4 w-4" />
+                    Account Settings
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
 
             <Button variant="ghost" size="icon">
               <Heart className="h-5 w-5" />
@@ -130,24 +159,26 @@ export default function Header() {
             className="md:hidden"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </Button>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden border-t bg-white">
-            <div className="px-4 py-4 space-y-4">
+          <div className="md:hidden bg-white border-t py-4">
+            <div className="space-y-4">
               {/* Mobile Search */}
-              <div className="flex space-x-2">
-                <Input
-                  type="search"
-                  placeholder="Search products..."
-                  className="flex-1"
-                />
-                <Button size="sm" className="bg-green-600 hover:bg-green-700">
-                  <Search className="h-4 w-4" />
-                </Button>
+              <div className="px-4">
+                <div className="flex space-x-2">
+                  <Input
+                    type="search"
+                    placeholder="Search products..."
+                    className="flex-1"
+                  />
+                  <Button size="sm" className="bg-green-600 hover:bg-green-700">
+                    <Search className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
 
               {/* Mobile Navigation Links */}
@@ -168,14 +199,40 @@ export default function Header() {
 
               {/* Mobile Actions */}
               <div className="flex items-center justify-around pt-4 border-t">
-                <Button variant="ghost" size="sm" className="flex-col gap-1">
-                  <User className="h-5 w-5" />
-                  <span className="text-xs">Account</span>
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm" className="flex-col gap-1">
+                      <User className="h-5 w-5" />
+                      <span className="text-xs">Account</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="center" className="w-48">
+                    <DropdownMenuItem asChild>
+                      <Link href="/orders" className="flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
+                        <Package className="h-4 w-4" />
+                        My Orders
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/profile/upi" className="flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
+                        <Smartphone className="h-4 w-4" />
+                        Manage UPI IDs
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/profile/settings" className="flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
+                        <Settings className="h-4 w-4" />
+                        Account Settings
+                      </Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                
                 <Button variant="ghost" size="sm" className="flex-col gap-1">
                   <Heart className="h-5 w-5" />
                   <span className="text-xs">Wishlist</span>
                 </Button>
+                
                 <Button variant="ghost" size="sm" className="flex-col gap-1 relative" asChild>
                   <Link href="/cart" onClick={() => setIsMenuOpen(false)}>
                     <ShoppingCart className="h-5 w-5" />

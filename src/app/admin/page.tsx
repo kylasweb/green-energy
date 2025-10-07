@@ -42,32 +42,33 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Mock data - in real app, fetch from API
-    const mockStats: DashboardStats = {
-      totalRevenue: 284750,
-      totalOrders: 1247,
-      totalProducts: 85,
-      totalCustomers: 892,
-      pendingOrders: 23,
-      lowStockProducts: 8,
-      recentOrders: [
-        { id: "ORD-001", customer: "Rajesh Kumar", amount: 2840, status: "CONFIRMED", date: "2024-01-15" },
-        { id: "ORD-002", customer: "Priya Sharma", amount: 5750, status: "PROCESSING", date: "2024-01-15" },
-        { id: "ORD-003", customer: "Amit Patel", amount: 1130, status: "PENDING", date: "2024-01-14" },
-        { id: "ORD-004", customer: "Sunita Reddy", amount: 4560, status: "SHIPPED", date: "2024-01-14" },
-        { id: "ORD-005", customer: "Vikram Singh", amount: 8990, status: "DELIVERED", date: "2024-01-13" }
-      ],
-      topProducts: [
-        { name: "Amaron 5L", sales: 156, revenue: 176280 },
-        { name: "Amaron Z4", sales: 142, revenue: 124250 },
-        { name: "Amaron 2.5L", sales: 128, revenue: 97024 },
-        { name: "Amaron Z5", sales: 98, revenue: 100940 },
-        { name: "Luminous Inverter", sales: 87, revenue: 217500 }
-      ]
+    const fetchDashboardStats = async () => {
+      try {
+        const response = await fetch('/api/admin/dashboard')
+        if (!response.ok) {
+          throw new Error('Failed to fetch dashboard stats')
+        }
+        const data = await response.json()
+        setStats(data)
+      } catch (error) {
+        console.error('Error fetching dashboard stats:', error)
+        // Fallback to empty stats if API fails
+        setStats({
+          totalRevenue: 0,
+          totalOrders: 0,
+          totalProducts: 0,
+          totalCustomers: 0,
+          pendingOrders: 0,
+          lowStockProducts: 0,
+          recentOrders: [],
+          topProducts: []
+        })
+      } finally {
+        setLoading(false)
+      }
     }
-    
-    setStats(mockStats)
-    setLoading(false)
+
+    fetchDashboardStats()
   }, [])
 
   const getStatusColor = (status: string) => {

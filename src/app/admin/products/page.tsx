@@ -122,106 +122,32 @@ export default function AdminProducts() {
   ]
 
   useEffect(() => {
-    // Mock data - in real app, fetch from API
-    const mockProducts: Product[] = [
-      {
-        id: "1",
-        name: "Amaron 2.5L",
-        slug: "amaron-2-5l",
-        description: "Reliable two-wheeler battery offering durability and smooth performance",
-        sku: "AMR-25L-001",
-        price: 758,
-        mrp: 899,
-        stockQuantity: 45,
-        lowStockThreshold: 10,
-        category: "Two-Wheeler Batteries",
-        brand: "Amaron",
-        images: [
-          "https://ui-avatars.com/api/?name=Amaron&background=FF0000&color=fff&size=256",
-          "https://via.placeholder.com/400x400/FF0000/FFFFFF?text=Amaron+2.5L"
-        ],
-        tags: ["battery", "automotive", "two-wheeler", "12v"],
-        isActive: true,
-        isFeatured: true,
-        createdAt: "2024-01-01",
-        updatedAt: "2024-01-15"
-      },
-      {
-        id: "2",
-        name: "Amaron Z4",
-        slug: "amaron-z4",
-        description: "Compact and efficient, designed for two-wheelers",
-        sku: "AMR-Z4-002",
-        price: 875,
-        mrp: 1020,
-        stockQuantity: 32,
-        lowStockThreshold: 10,
-        category: "Two-Wheeler Batteries",
-        brand: "Amaron",
-        images: [
-          "https://ui-avatars.com/api/?name=Amaron+Z4&background=FF0000&color=fff&size=256"
-        ],
-        isActive: true,
-        isFeatured: true,
-        createdAt: "2024-01-02",
-        updatedAt: "2024-01-14"
-      },
-      {
-        id: "3",
-        name: "Amaron Z5",
-        slug: "amaron-z5",
-        description: "Enhanced capacity with quick charging and stable power output",
-        sku: "AMR-Z5-003",
-        price: 1030,
-        mrp: 1200,
-        stockQuantity: 8,
-        lowStockThreshold: 10,
-        category: "Two-Wheeler Batteries",
-        brand: "Amaron",
-        isActive: true,
-        isFeatured: false,
-        createdAt: "2024-01-03",
-        updatedAt: "2024-01-13"
-      },
-      {
-        id: "4",
-        name: "Luminous Inverter",
-        slug: "luminous-inverter",
-        description: "High efficiency inverter for home and office use",
-        sku: "LUM-INV-001",
-        price: 2500,
-        mrp: 2999,
-        stockQuantity: 15,
-        lowStockThreshold: 5,
-        category: "Inverters",
-        brand: "Luminous",
-        isActive: true,
-        isFeatured: true,
-        createdAt: "2024-01-04",
-        updatedAt: "2024-01-12"
-      },
-      {
-        id: "5",
-        name: "Exide Battery",
-        slug: "exide-battery",
-        description: "Durable battery with long life",
-        sku: "EXD-BAT-001",
-        price: 3200,
-        mrp: 3799,
-        stockQuantity: 5,
-        lowStockThreshold: 10,
-        category: "Four-Wheeler Batteries",
-        brand: "Exide",
-        isActive: false,
-        isFeatured: false,
-        createdAt: "2024-01-05",
-        updatedAt: "2024-01-11"
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('/api/admin/products')
+        if (!response.ok) {
+          throw new Error('Failed to fetch products')
+        }
+        const data = await response.json()
+        // Transform the API response to match the component structure
+        const transformedProducts = data.products.map((product: any) => ({
+          ...product,
+          category: product.category?.name || 'Uncategorized',
+          brand: product.brand?.name || 'Unknown Brand',
+          images: product.images || []
+        }))
+        setProducts(transformedProducts)
+        setFilteredProducts(transformedProducts)
+      } catch (error) {
+        console.error('Error fetching products:', error)
+        setProducts([])
+        setFilteredProducts([])
+      } finally {
+        setLoading(false)
       }
-    ]
-    
-    setProducts(mockProducts)
-    setFilteredProducts(mockProducts)
-    setLoading(false)
+    }
+
+    fetchProducts()
   }, [])
 
   useEffect(() => {
@@ -276,33 +202,122 @@ export default function AdminProducts() {
     }
   }
 
-  const handleSaveProduct = () => {
-    if (editingProduct) {
-      // Update existing product
-      const updatedProducts = products.map(p =>
-        p.id === editingProduct.id
-          ? { ...p, ...formData, updatedAt: new Date().toISOString() }
-          : p
+  const handleSaveProduct = async () => {
+    try {
+      setLoading(true)
+      
+      // Find category and brand IDs
+      const categoryObj = await fetch('/api/admin/categories').then(r => r.json()).then(data => 
+        data.categories.find((c: any) => c.name === formData.category)
       )
-      setProducts(updatedProducts)
-    } else {
-      // Add new product
-      const newProduct: Product = {
-        id: Date.now().toString(),
-        slug: formData.name.toLowerCase().replace(/\s+/g, '-'),
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        ...formData
+      const brandObj = await fetch('/api/admin/brands').then(r => r.json()).then(data => 
+        data.brands.find((b: any) => b.name === formData.brand)
+      )
+
+      if (!categoryObj || !brandObj) {
+        alert('Please select valid category and brand')
+        return
       }
-      setProducts([...products, newProduct])
+
+      const productData = {
+        ...formData,
+        categoryId: categoryObj.id,
+        brandId: brandObj.id
+      }
+
+      if (editingProduct) {
+        // Update existing product
+        const response = await fetch('/api/admin/products', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id: editingProduct.id,
+            ...productData
+          }),
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to update product')
+        }
+
+        const updatedProduct = await response.json()
+        const transformedProduct = {
+          ...updatedProduct,
+          category: updatedProduct.category?.name || 'Uncategorized',
+          brand: updatedProduct.brand?.name || 'Unknown Brand',
+          images: updatedProduct.images || []
+        }
+
+        const updatedProducts = products.map(p =>
+          p.id === editingProduct.id ? transformedProduct : p
+        )
+        setProducts(updatedProducts)
+        setFilteredProducts(updatedProducts)
+      } else {
+        // Add new product
+        const response = await fetch('/api/admin/products', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(productData),
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to create product')
+        }
+
+        const newProduct = await response.json()
+        const transformedProduct = {
+          ...newProduct,
+          category: newProduct.category?.name || 'Uncategorized',
+          brand: newProduct.brand?.name || 'Unknown Brand',
+          images: newProduct.images || []
+        }
+
+        const updatedProducts = [...products, transformedProduct]
+        setProducts(updatedProducts)
+        setFilteredProducts(updatedProducts)
+      }
+
+      setIsDialogOpen(false)
+    } catch (error) {
+      console.error('Error saving product:', error)
+      alert('Failed to save product. Please try again.')
+    } finally {
+      setLoading(false)
     }
-    setIsDialogOpen(false)
   }
 
-  const handleDeleteProduct = (productId: string) => {
-    if (confirm("Are you sure you want to delete this product?")) {
-      const updatedProducts = products.filter(p => p.id !== productId)
-      setProducts(updatedProducts)
+  const handleDeleteProduct = async (id: string) => {
+    if (confirm('Are you sure you want to delete this product?')) {
+      try {
+        setLoading(true)
+        
+        const response = await fetch('/api/admin/products', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id }),
+        })
+
+        if (!response.ok) {
+          const error = await response.json()
+          throw new Error(error.error || 'Failed to delete product')
+        }
+
+        const updatedProducts = products.filter(p => p.id !== id)
+        setProducts(updatedProducts)
+        setFilteredProducts(updatedProducts)
+      } catch (error: any) {
+        console.error('Error deleting product:', error)
+        alert(error.message || 'Failed to delete product. Please try again.')
+      } finally {
+        setLoading(false)
+      }
     }
   }
 

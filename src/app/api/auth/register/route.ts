@@ -63,26 +63,16 @@ export async function POST(request: NextRequest) {
     // Create user
     const user = await db.user.create({
       data: {
-        firstName,
-        lastName,
+        name: `${firstName} ${lastName}`.trim(),
         email,
         phone,
         password: hashedPassword,
-        role: 'customer',
-        isActive: true,
-        emailVerified: false,
-        profile: {
-          create: {
-            avatar: null,
-            dateOfBirth: null,
-            gender: null
-          }
-        }
+        role: 'CUSTOMER',
+        isActive: true
       },
       select: {
         id: true,
-        firstName: true,
-        lastName: true,
+        name: true,
         email: true,
         phone: true,
         role: true

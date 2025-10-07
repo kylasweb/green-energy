@@ -84,142 +84,25 @@ export default function AdminOrders() {
   const [statusNotes, setStatusNotes] = useState("")
 
   useEffect(() => {
-    // Mock data - in real app, fetch from API
-    const mockOrders: Order[] = [
-      {
-        id: "1",
-        orderNumber: "ORD-2024-001",
-        customerName: "Rajesh Kumar",
-        customerEmail: "rajesh.kumar@email.com",
-        customerPhone: "+91 98765 43210",
-        customerAddress: "123 Main Street, Andheri East",
-        customerCity: "Mumbai",
-        customerState: "Maharashtra",
-        customerCountry: "India",
-        customerZipCode: "400069",
-        subtotal: 2400,
-        tax: 432,
-        shipping: 0,
-        discount: 0,
-        total: 2832,
-        status: "CONFIRMED",
-        paymentStatus: "PAID",
-        paymentMethod: "Online Payment",
-        createdAt: "2024-01-15T10:30:00Z",
-        updatedAt: "2024-01-15T11:00:00Z",
-        items: [
-          { id: "1", productName: "Amaron 2.5L", quantity: 2, price: 758, total: 1516 },
-          { id: "2", productName: "Amaron Z4", quantity: 1, price: 875, total: 875 }
-        ]
-      },
-      {
-        id: "2",
-        orderNumber: "ORD-2024-002",
-        customerName: "Priya Sharma",
-        customerEmail: "priya.sharma@email.com",
-        customerPhone: "+91 98765 43211",
-        customerAddress: "456 Park Avenue, Indiranagar",
-        customerCity: "Bangalore",
-        customerState: "Karnataka",
-        customerCountry: "India",
-        customerZipCode: "560038",
-        subtotal: 4875,
-        tax: 877.5,
-        shipping: 0,
-        discount: 0,
-        total: 5752.5,
-        status: "PROCESSING",
-        paymentStatus: "PAID",
-        paymentMethod: "Cash on Delivery",
-        createdAt: "2024-01-15T14:20:00Z",
-        updatedAt: "2024-01-15T15:30:00Z",
-        items: [
-          { id: "3", productName: "Luminous Inverter", quantity: 1, price: 2500, total: 2500 },
-          { id: "4", productName: "Amaron Z5", quantity: 2, price: 1030, total: 2060 }
-        ]
-      },
-      {
-        id: "3",
-        orderNumber: "ORD-2024-003",
-        customerName: "Amit Patel",
-        customerEmail: "amit.patel@email.com",
-        customerPhone: "+91 98765 43212",
-        customerAddress: "789 Gandhi Road, Navrangpura",
-        customerCity: "Ahmedabad",
-        customerState: "Gujarat",
-        customerCountry: "India",
-        customerZipCode: "380009",
-        subtotal: 1130,
-        tax: 203.4,
-        shipping: 0,
-        discount: 0,
-        total: 1333.4,
-        status: "PENDING",
-        paymentStatus: "PENDING",
-        paymentMethod: "Online Payment",
-        createdAt: "2024-01-14T16:45:00Z",
-        updatedAt: "2024-01-14T16:45:00Z",
-        items: [
-          { id: "5", productName: "Amaron Z5", quantity: 1, price: 1030, total: 1030 }
-        ]
-      },
-      {
-        id: "4",
-        orderNumber: "ORD-2024-004",
-        customerName: "Sunita Reddy",
-        customerEmail: "sunita.reddy@email.com",
-        customerPhone: "+91 98765 43213",
-        customerAddress: "321 Beach Road, Besant Nagar",
-        customerCity: "Chennai",
-        customerState: "Tamil Nadu",
-        customerCountry: "India",
-        customerZipCode: "600090",
-        subtotal: 3864,
-        tax: 695.52,
-        shipping: 0,
-        discount: 0,
-        total: 4559.52,
-        status: "SHIPPED",
-        paymentStatus: "PAID",
-        paymentMethod: "Online Payment",
-        createdAt: "2024-01-14T09:15:00Z",
-        updatedAt: "2024-01-15T10:00:00Z",
-        items: [
-          { id: "6", productName: "Exide Battery", quantity: 1, price: 3200, total: 3200 },
-          { id: "7", productName: "Amaron 2.5L", quantity: 1, price: 758, total: 758 }
-        ]
-      },
-      {
-        id: "5",
-        orderNumber: "ORD-2024-005",
-        customerName: "Vikram Singh",
-        customerEmail: "vikram.singh@email.com",
-        customerPhone: "+91 98765 43214",
-        customerAddress: "654 Hill Road, Malabar Hill",
-        customerCity: "Mumbai",
-        customerState: "Maharashtra",
-        customerCountry: "India",
-        customerZipCode: "400006",
-        subtotal: 7610,
-        tax: 1369.8,
-        shipping: 0,
-        discount: 0,
-        total: 8979.8,
-        status: "DELIVERED",
-        paymentStatus: "PAID",
-        paymentMethod: "Online Payment",
-        createdAt: "2024-01-13T13:20:00Z",
-        updatedAt: "2024-01-15T16:30:00Z",
-        items: [
-          { id: "8", productName: "Amaron 5L", quantity: 3, price: 1130, total: 3390 },
-          { id: "9", productName: "Luminous Inverter", quantity: 2, price: 2500, total: 5000 }
-        ]
+    const fetchOrders = async () => {
+      try {
+        const response = await fetch('/api/admin/orders')
+        if (!response.ok) {
+          throw new Error('Failed to fetch orders')
+        }
+        const data = await response.json()
+        setOrders(data.orders || [])
+        setFilteredOrders(data.orders || [])
+      } catch (error) {
+        console.error('Error fetching orders:', error)
+        setOrders([])
+        setFilteredOrders([])
+      } finally {
+        setLoading(false)
       }
-    ]
-    
-    setOrders(mockOrders)
-    setFilteredOrders(mockOrders)
-    setLoading(false)
+    }
+
+    fetchOrders()
   }, [])
 
   useEffect(() => {
@@ -252,19 +135,44 @@ export default function AdminOrders() {
     setIsStatusDialogOpen(true)
   }
 
-  const handleSaveStatus = () => {
+  const handleSaveStatus = async () => {
     if (selectedOrder && newStatus) {
-      const updatedOrders = orders.map(order =>
-        order.id === selectedOrder.id
-          ? { 
-              ...order, 
-              status: newStatus as Order["status"],
-              updatedAt: new Date().toISOString()
-            }
-          : order
-      )
-      setOrders(updatedOrders)
-      setIsStatusDialogOpen(false)
+      try {
+        const response = await fetch(`/api/admin/orders`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ 
+            orderId: selectedOrder.id,
+            status: newStatus,
+            notes: statusNotes
+          }),
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to update order status')
+        }
+
+        const updatedOrder = await response.json()
+        
+        // Update the local state
+        const updatedOrders = orders.map(order =>
+          order.id === selectedOrder.id ? updatedOrder : order
+        )
+        setOrders(updatedOrders)
+        setFilteredOrders(updatedOrders.filter(order =>
+          order.orderNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          order.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          order.customerEmail.toLowerCase().includes(searchTerm.toLowerCase())
+        ))
+        
+        setIsStatusDialogOpen(false)
+        setStatusNotes("")
+      } catch (error) {
+        console.error('Error updating order status:', error)
+        // You might want to show a toast notification here
+      }
     }
   }
 

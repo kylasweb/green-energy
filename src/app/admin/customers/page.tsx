@@ -75,121 +75,25 @@ export default function AdminCustomers() {
   })
 
   useEffect(() => {
-    // Mock data - in real app, fetch from API
-    const mockUsers: User[] = [
-      {
-        id: "1",
-        name: "Rajesh Kumar",
-        email: "rajesh.kumar@email.com",
-        phone: "+91 98765 43210",
-        role: "CUSTOMER",
-        address: "123 Main Street, Andheri East",
-        city: "Mumbai",
-        state: "Maharashtra",
-        country: "India",
-        zipCode: "400069",
-        isActive: true,
-        createdAt: "2024-01-01T10:30:00Z",
-        updatedAt: "2024-01-15T11:00:00Z",
-        lastLogin: "2024-01-15T09:30:00Z",
-        totalOrders: 5,
-        totalSpent: 28320
-      },
-      {
-        id: "2",
-        name: "Priya Sharma",
-        email: "priya.sharma@email.com",
-        phone: "+91 98765 43211",
-        role: "CUSTOMER",
-        address: "456 Park Avenue, Indiranagar",
-        city: "Bangalore",
-        state: "Karnataka",
-        country: "India",
-        zipCode: "560038",
-        isActive: true,
-        createdAt: "2024-01-02T14:20:00Z",
-        updatedAt: "2024-01-15T15:30:00Z",
-        lastLogin: "2024-01-14T18:20:00Z",
-        totalOrders: 3,
-        totalSpent: 17250
-      },
-      {
-        id: "3",
-        name: "Amit Patel",
-        email: "amit.patel@email.com",
-        phone: "+91 98765 43212",
-        role: "CUSTOMER",
-        address: "789 Gandhi Road, Navrangpura",
-        city: "Ahmedabad",
-        state: "Gujarat",
-        country: "India",
-        zipCode: "380009",
-        isActive: true,
-        createdAt: "2024-01-03T16:45:00Z",
-        updatedAt: "2024-01-14T16:45:00Z",
-        lastLogin: "2024-01-13T12:45:00Z",
-        totalOrders: 2,
-        totalSpent: 8650
-      },
-      {
-        id: "4",
-        name: "Admin User",
-        email: "admin@greenenergy.com",
-        phone: "+91 98765 43213",
-        role: "ADMIN",
-        address: "321 Admin Street",
-        city: "Mumbai",
-        state: "Maharashtra",
-        country: "India",
-        zipCode: "400001",
-        isActive: true,
-        createdAt: "2023-12-01T09:00:00Z",
-        updatedAt: "2024-01-15T10:00:00Z",
-        lastLogin: "2024-01-15T08:00:00Z",
-        totalOrders: 0,
-        totalSpent: 0
-      },
-      {
-        id: "5",
-        name: "Super Admin",
-        email: "superadmin@greenenergy.com",
-        phone: "+91 98765 43214",
-        role: "SUPER_ADMIN",
-        address: "654 Super Admin Road",
-        city: "Delhi",
-        state: "Delhi",
-        country: "India",
-        zipCode: "110001",
-        isActive: true,
-        createdAt: "2023-11-01T08:00:00Z",
-        updatedAt: "2024-01-15T09:00:00Z",
-        lastLogin: "2024-01-15T07:30:00Z",
-        totalOrders: 0,
-        totalSpent: 0
-      },
-      {
-        id: "6",
-        name: "Sunita Reddy",
-        email: "sunita.reddy@email.com",
-        phone: "+91 98765 43215",
-        role: "CUSTOMER",
-        address: "321 Beach Road, Besant Nagar",
-        city: "Chennai",
-        state: "Tamil Nadu",
-        country: "India",
-        zipCode: "600090",
-        isActive: false,
-        createdAt: "2024-01-04T09:15:00Z",
-        updatedAt: "2024-01-10T10:00:00Z",
-        lastLogin: "2024-01-09T16:15:00Z",
-        totalOrders: 1,
-        totalSpent: 4559.52
+    const fetchCustomers = async () => {
+      try {
+        const response = await fetch('/api/admin/customers')
+        if (!response.ok) {
+          throw new Error('Failed to fetch customers')
+        }
+        const data = await response.json()
+        setUsers(data.customers || [])
+        setFilteredUsers(data.customers || [])
+      } catch (error) {
+        console.error('Error fetching customers:', error)
+        setUsers([])
+        setFilteredUsers([])
+      } finally {
+        setLoading(false)
       }
-    ]
-    
-    setUsers(mockUsers)
-    setFilteredUsers(mockUsers)
-    setLoading(false)
+    }
+
+    fetchCustomers()
   }, [])
 
   useEffect(() => {
@@ -230,27 +134,91 @@ export default function AdminCustomers() {
     setIsEditDialogOpen(true)
   }
 
-  const handleSaveUser = () => {
+  const handleSaveUser = async () => {
     if (selectedUser) {
-      const updatedUsers = users.map(user =>
-        user.id === selectedUser.id
-          ? { 
-              ...user, 
-              role: editForm.role as User["role"],
-              isActive: editForm.isActive,
-              updatedAt: new Date().toISOString()
-            }
-          : user
-      )
-      setUsers(updatedUsers)
-      setIsEditDialogOpen(false)
+      try {
+        setLoading(true)
+        
+        const response = await fetch('/api/admin/customers', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id: selectedUser.id,
+            role: editForm.role as User["role"],
+            isActive: editForm.isActive
+          }),
+        })
+
+        if (!response.ok) {
+          const error = await response.json()
+          throw new Error(error.error || 'Failed to update user')
+        }
+
+        const updatedUser = await response.json()
+        const updatedUsers = users.map(user =>
+          user.id === selectedUser.id
+            ? { 
+                ...user, 
+                ...updatedUser,
+                updatedAt: updatedUser.updatedAt
+              }
+            : user
+        )
+        setUsers(updatedUsers)
+        setFilteredUsers(updatedUsers.filter(user =>
+          (roleFilter === "all" || user.role === roleFilter) &&
+          (statusFilter === "all" || 
+           (statusFilter === "active" && user.isActive) ||
+           (statusFilter === "inactive" && !user.isActive)) &&
+          (user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+           user.email?.toLowerCase().includes(searchTerm.toLowerCase()))
+        ))
+        setIsEditDialogOpen(false)
+      } catch (error: any) {
+        console.error('Error updating user:', error)
+        alert(error.message || 'Failed to update user. Please try again.')
+      } finally {
+        setLoading(false)
+      }
     }
   }
 
-  const handleDeleteUser = (userId: string) => {
+  const handleDeleteUser = async (userId: string) => {
     if (confirm("Are you sure you want to delete this user? This action cannot be undone.")) {
-      const updatedUsers = users.filter(user => user.id !== userId)
-      setUsers(updatedUsers)
+      try {
+        setLoading(true)
+        
+        const response = await fetch('/api/admin/customers', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id: userId }),
+        })
+
+        if (!response.ok) {
+          const error = await response.json()
+          throw new Error(error.error || 'Failed to delete user')
+        }
+
+        const updatedUsers = users.filter(user => user.id !== userId)
+        setUsers(updatedUsers)
+        setFilteredUsers(updatedUsers.filter(user =>
+          (roleFilter === "all" || user.role === roleFilter) &&
+          (statusFilter === "all" || 
+           (statusFilter === "active" && user.isActive) ||
+           (statusFilter === "inactive" && !user.isActive)) &&
+          (user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+           user.email?.toLowerCase().includes(searchTerm.toLowerCase()))
+        ))
+      } catch (error: any) {
+        console.error('Error deleting user:', error)
+        alert(error.message || 'Failed to delete user. Please try again.')
+      } finally {
+        setLoading(false)
+      }
     }
   }
 
