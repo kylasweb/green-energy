@@ -1,0 +1,415 @@
+/* Neumorphism Design System */
+
+/* CSS Variables for Neumorphism */
+:root {
+  /* Light Theme Neumorphism */
+  --neu-bg-light: #f0f0f3;
+  --neu-shadow-light-1: #d1d1d4;
+  --neu-shadow-light-2: #ffffff;
+  --neu-text-light: #2c2c2c;
+  --neu-text-light-secondary: #666666;
+
+  /* Gradients for depth */
+  --neu-gradient-light: linear-gradient(145deg, #f0f0f3, #cacace);
+  --neu-gradient-light-reverse: linear-gradient(145deg, #cacace, #f0f0f3);
+
+  /* Shadows */
+  --neu-shadow-light-outer: 9px 9px 18px #d1d1d4, -9px -9px 18px #ffffff;
+  --neu-shadow-light-inner: inset 9px 9px 18px #d1d1d4,
+    inset -9px -9px 18px #ffffff;
+  --neu-shadow-light-pressed: inset 4px 4px 8px #d1d1d4,
+    inset -4px -4px 8px #ffffff;
+
+  /* Subtle shadows for hover states */
+  --neu-shadow-light-hover: 6px 6px 12px #d1d1d4, -6px -6px 12px #ffffff;
+  --neu-shadow-light-small: 3px 3px 6px #d1d1d4, -3px -3px 6px #ffffff;
+}
+
+[data-theme="dark"] {
+  /* Dark Theme Neumorphism */
+  --neu-bg-dark: #2c2c2c;
+  --neu-shadow-dark-1: #202020;
+  --neu-shadow-dark-2: #383838;
+  --neu-text-dark: #e0e0e0;
+  --neu-text-dark-secondary: #b0b0b0;
+
+  /* Gradients for depth */
+  --neu-gradient-dark: linear-gradient(145deg, #2c2c2c, #252525);
+  --neu-gradient-dark-reverse: linear-gradient(145deg, #252525, #2c2c2c);
+
+  /* Shadows */
+  --neu-shadow-dark-outer: 9px 9px 18px #202020, -9px -9px 18px #383838;
+  --neu-shadow-dark-inner: inset 9px 9px 18px #202020,
+    inset -9px -9px 18px #383838;
+  --neu-shadow-dark-pressed: inset 4px 4px 8px #202020,
+    inset -4px -4px 8px #383838;
+
+  /* Subtle shadows for hover states */
+  --neu-shadow-dark-hover: 6px 6px 12px #202020, -6px -6px 12px #383838;
+  --neu-shadow-dark-small: 3px 3px 6px #202020, -3px -3px 6px #383838;
+}
+
+/* Base Neumorphism Classes */
+
+/* Container - Basic neumorphic surface */
+.neu-container {
+  background: var(--neu-bg-light);
+  border-radius: 12px;
+  box-shadow: var(--neu-shadow-light-outer);
+  color: var(--neu-text-light);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme="dark"] .neu-container {
+  background: var(--neu-bg-dark);
+  box-shadow: var(--neu-shadow-dark-outer);
+  color: var(--neu-text-dark);
+}
+
+/* Button - Raised neumorphic button */
+.neu-button {
+  background: var(--neu-bg-light);
+  border-radius: 12px;
+  box-shadow: var(--neu-shadow-light-outer);
+  color: var(--neu-text-light);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  border: none;
+}
+
+.neu-button:hover {
+  box-shadow: var(--neu-shadow-light-hover);
+  transform: translateY(-1px);
+}
+
+.neu-button:active {
+  box-shadow: var(--neu-shadow-light-pressed);
+  transform: translateY(0);
+}
+
+[data-theme="dark"] .neu-button {
+  background: var(--neu-bg-dark);
+  box-shadow: var(--neu-shadow-dark-outer);
+  color: var(--neu-text-dark);
+}
+
+[data-theme="dark"] .neu-button:hover {
+  box-shadow: var(--neu-shadow-dark-hover);
+}
+
+[data-theme="dark"] .neu-button:active {
+  box-shadow: var(--neu-shadow-dark-pressed);
+}
+
+/* Input - Inset neumorphic input */
+.neu-input {
+  background: var(--neu-bg-light);
+  border-radius: 12px;
+  box-shadow: var(--neu-shadow-light-inner);
+  color: var(--neu-text-light);
+  padding: 12px 16px;
+  border: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.neu-input:focus {
+  outline: none;
+  box-shadow: var(--neu-shadow-light-inner), 0 0 0 2px rgba(99, 102, 241, 0.3);
+}
+
+.neu-input::placeholder {
+  color: var(--neu-text-light-secondary);
+}
+
+[data-theme="dark"] .neu-input {
+  background: var(--neu-bg-dark);
+  box-shadow: var(--neu-shadow-dark-inner);
+  color: var(--neu-text-dark);
+}
+
+[data-theme="dark"] .neu-input:focus {
+  box-shadow: var(--neu-shadow-dark-inner), 0 0 0 2px rgba(129, 140, 248, 0.3);
+}
+
+[data-theme="dark"] .neu-input::placeholder {
+  color: var(--neu-text-dark-secondary);
+}
+
+/* Card - Elevated neumorphic card */
+.neu-card {
+  background: var(--neu-bg-light);
+  border-radius: 16px;
+  box-shadow: var(--neu-shadow-light-outer);
+  color: var(--neu-text-light);
+  padding: 24px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.neu-card:hover {
+  box-shadow: var(--neu-shadow-light-hover);
+  transform: translateY(-2px);
+}
+
+[data-theme="dark"] .neu-card {
+  background: var(--neu-bg-dark);
+  box-shadow: var(--neu-shadow-dark-outer);
+  color: var(--neu-text-dark);
+}
+
+[data-theme="dark"] .neu-card:hover {
+  box-shadow: var(--neu-shadow-dark-hover);
+}
+
+/* Pressed state - For active/selected items */
+.neu-pressed {
+  box-shadow: var(--neu-shadow-light-pressed);
+  transform: translateY(1px);
+}
+
+[data-theme="dark"] .neu-pressed {
+  box-shadow: var(--neu-shadow-dark-pressed);
+}
+
+/* Inset - For recessed elements */
+.neu-inset {
+  background: var(--neu-bg-light);
+  box-shadow: var(--neu-shadow-light-inner);
+  border-radius: 12px;
+}
+
+[data-theme="dark"] .neu-inset {
+  background: var(--neu-bg-dark);
+  box-shadow: var(--neu-shadow-dark-inner);
+}
+
+/* Small elements */
+.neu-small {
+  box-shadow: var(--neu-shadow-light-small);
+}
+
+[data-theme="dark"] .neu-small {
+  box-shadow: var(--neu-shadow-dark-small);
+}
+
+/* Gradient variants */
+.neu-gradient {
+  background: var(--neu-gradient-light);
+}
+
+[data-theme="dark"] .neu-gradient {
+  background: var(--neu-gradient-dark);
+}
+
+.neu-gradient-reverse {
+  background: var(--neu-gradient-light-reverse);
+}
+
+[data-theme="dark"] .neu-gradient-reverse {
+  background: var(--neu-gradient-dark-reverse);
+}
+
+/* Icon buttons */
+.neu-icon-button {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--neu-bg-light);
+  box-shadow: var(--neu-shadow-light-outer);
+  color: var(--neu-text-light);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.neu-icon-button:hover {
+  box-shadow: var(--neu-shadow-light-hover);
+  transform: translateY(-1px);
+}
+
+.neu-icon-button:active {
+  box-shadow: var(--neu-shadow-light-pressed);
+  transform: translateY(0);
+}
+
+[data-theme="dark"] .neu-icon-button {
+  background: var(--neu-bg-dark);
+  box-shadow: var(--neu-shadow-dark-outer);
+  color: var(--neu-text-dark);
+}
+
+[data-theme="dark"] .neu-icon-button:hover {
+  box-shadow: var(--neu-shadow-dark-hover);
+}
+
+[data-theme="dark"] .neu-icon-button:active {
+  box-shadow: var(--neu-shadow-dark-pressed);
+}
+
+/* Utilities */
+.neu-text-primary {
+  color: var(--neu-text-light);
+}
+
+.neu-text-secondary {
+  color: var(--neu-text-light-secondary);
+}
+
+[data-theme="dark"] .neu-text-primary {
+  color: var(--neu-text-dark);
+}
+
+[data-theme="dark"] .neu-text-secondary {
+  color: var(--neu-text-dark-secondary);
+}
+
+/* Animation utilities */
+.neu-animate {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.neu-animate-fast {
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.neu-animate-slow {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Loading state */
+.neu-loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.neu-loading::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: neu-shimmer 2s infinite;
+}
+
+[data-theme="dark"] .neu-loading::before {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+}
+
+@keyframes neu-shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Focus ring for accessibility */
+.neu-focus-ring:focus-visible {
+  outline: none;
+  box-shadow: var(--neu-shadow-light-outer), 0 0 0 2px rgba(99, 102, 241, 0.5);
+}
+
+[data-theme="dark"] .neu-focus-ring:focus-visible {
+  box-shadow: var(--neu-shadow-dark-outer), 0 0 0 2px rgba(129, 140, 248, 0.5);
+}
+
+/* Additional Icon Container Classes */
+.neu-icon-container {
+  @apply w-16 h-16 rounded-full flex items-center justify-center;
+  background: var(--neu-bg-light);
+  box-shadow: var(--neu-shadow-light-small);
+  transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .neu-icon-container {
+  background: var(--neu-bg-dark);
+  box-shadow: var(--neu-shadow-dark-small);
+}
+
+.neu-icon-container-lg {
+  @apply w-20 h-20 rounded-full flex items-center justify-center;
+  background: var(--neu-bg-light);
+  box-shadow: var(--neu-shadow-light-outer);
+  transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .neu-icon-container-lg {
+  background: var(--neu-bg-dark);
+  box-shadow: var(--neu-shadow-dark-outer);
+}
+
+/* Section Backgrounds */
+.neu-section-bg {
+  background: var(--neu-bg-light);
+}
+
+[data-theme="dark"] .neu-section-bg {
+  background: var(--neu-bg-dark);
+}
+
+.neu-section-bg-alt {
+  background: linear-gradient(135deg, var(--neu-bg-light) 0%, #e8e8eb 100%);
+}
+
+[data-theme="dark"] .neu-section-bg-alt {
+  background: linear-gradient(135deg, var(--neu-bg-dark) 0%, #252525 100%);
+}
+
+/* Hero Gradient Background */
+.neu-gradient-hero {
+  background: linear-gradient(135deg, #059669 0%, #047857 50%, #065f46 100%);
+  position: relative;
+}
+
+.neu-gradient-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.03) 2px,
+    rgba(255, 255, 255, 0.03) 4px
+  );
+}
+
+/* Secondary Gradient for Newsletter */
+.neu-gradient-secondary {
+  background: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%);
+}
+
+/* Pattern Overlay */
+.neu-pattern {
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgba(255, 255, 255, 0.15) 1px,
+    transparent 0
+  );
+  background-size: 20px 20px;
+}
+
+/* Button Gradient */
+.neu-button-gradient {
+  background: linear-gradient(145deg, #f0f0f3, #cacace);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .neu-button-gradient {
+  background: linear-gradient(145deg, #2c2c2c, #252525);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}

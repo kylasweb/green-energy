@@ -12,6 +12,8 @@ import Footer from "@/components/layout/footer"
 import { ShoppingCart, Search, User, Heart, Star, Leaf, Battery, Zap, Shield, Truck, Headphones } from "lucide-react"
 import { useCart } from "@/contexts/cart-context"
 import { toast } from "sonner"
+import { GlassmorphicCard, GlassmorphicButton, GlassmorphicInput } from "@/components/ui/glassmorphic"
+import GlassmorphicProductCard from "@/components/ui/glassmorphic-product-card"
 
 export default function Home() {
   const [email, setEmail] = useState("")
@@ -129,251 +131,224 @@ export default function Home() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white flex flex-col">
+    <div className="min-h-screen neu-container rounded-none flex flex-col">
       <Header />
       
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative bg-gradient-to-r from-green-600 to-green-800 text-white py-20">
-          <div className="container mx-auto px-4">
+        <section className="relative min-h-screen glass-gradient-hero flex items-center overflow-hidden">
+          <div className="absolute inset-0 glass-pattern opacity-10"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-green-600/80 via-green-700/70 to-green-800/80"></div>
+          <div className="relative z-10 container mx-auto px-4">
             <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div>
-                <h1 className="text-4xl md:text-6xl font-bold mb-6">
+              <div className="text-white">
+                <h1 className="text-4xl md:text-6xl font-bold mb-6 drop-shadow-lg">
                   Power Your Future with Green Energy Solutions
                 </h1>
-                <p className="text-xl mb-8 text-green-100">
+                <p className="text-xl mb-8 text-green-100 drop-shadow">
                   Premium quality inverters, batteries, and solar solutions for all your energy needs. 
                   Trusted brands, competitive prices, and exceptional service.
                 </p>
                 <div className="flex space-x-4">
-                  <Button size="lg" className="bg-white text-green-600 hover:bg-green-50">
+                  <GlassmorphicButton size="lg" className="bg-white text-green-600 hover:bg-green-50 shadow-xl">
                     <ShoppingCart className="mr-2 h-5 w-5" />
                     Shop Now
-                  </Button>
-                  <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-green-600">
+                  </GlassmorphicButton>
+                  <GlassmorphicButton size="lg" variant="gradient" className="border-2 border-white/30 text-white backdrop-blur-sm">
                     Learn More
-                  </Button>
+                  </GlassmorphicButton>
                 </div>
               </div>
               <div className="relative">
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8">
-                  <div className="grid grid-cols-2 gap-4">
+                <GlassmorphicCard className="bg-white/10 backdrop-blur-md border border-white/20 text-white">
+                  <div className="grid grid-cols-2 gap-6">
                     <div className="text-center">
-                      <div className="text-3xl font-bold">85+</div>
-                      <div className="text-green-100">Products</div>
+                      <GlassmorphicCard variant="subtle" className="p-4 bg-white/5">
+                        <div className="text-3xl font-bold text-white mb-1">85+</div>
+                        <div className="text-green-100">Products</div>
+                      </GlassmorphicCard>
                     </div>
                     <div className="text-center">
-                      <div className="text-3xl font-bold">10K+</div>
-                      <div className="text-green-100">Happy Customers</div>
+                      <GlassmorphicCard variant="subtle" className="p-4 bg-white/5">
+                        <div className="text-3xl font-bold text-white mb-1">10K+</div>
+                        <div className="text-green-100">Happy Customers</div>
+                      </GlassmorphicCard>
                     </div>
                     <div className="text-center">
-                      <div className="text-3xl font-bold">5+</div>
-                      <div className="text-green-100">Brands</div>
+                      <GlassmorphicCard variant="subtle" className="p-4 bg-white/5">
+                        <div className="text-3xl font-bold text-white mb-1">5+</div>
+                        <div className="text-green-100">Brands</div>
+                      </GlassmorphicCard>
                     </div>
                     <div className="text-center">
-                      <div className="text-3xl font-bold">24/7</div>
-                      <div className="text-green-100">Support</div>
+                      <GlassmorphicCard variant="subtle" className="p-4 bg-white/5">
+                        <div className="text-3xl font-bold text-white mb-1">24/7</div>
+                        <div className="text-green-100">Support</div>
+                      </GlassmorphicCard>
                     </div>
                   </div>
-                </div>
+                </GlassmorphicCard>
               </div>
             </div>
           </div>
         </section>
 
         {/* Featured Products */}
-        <section className="py-16">
+        <section className="py-16 glass-section-bg">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Featured Products</h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                Discover our top-selling inverters and batteries, carefully selected for quality and performance
-              </p>
+              <GlassmorphicCard className="inline-block px-8 py-4 mb-6">
+                <h2 className="text-3xl font-bold glass-text-primary mb-2">Featured Products</h2>
+                <p className="glass-text-secondary max-w-2xl">
+                  Discover our top-selling inverters and batteries, carefully selected for quality and performance
+                </p>
+              </GlassmorphicCard>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {featuredProducts.map((product) => (
-                <Card key={product.id} className="hover:shadow-lg transition-shadow">
-                  <CardHeader className="pb-3">
-                    <div className="relative h-48 bg-gray-100 rounded-lg mb-4">
-                      <Image
-                        src={product.image}
-                        alt={product.name}
-                        fill
-                        className="object-cover rounded-lg"
-                      />
-                      <Badge className="absolute top-2 left-2 bg-green-600">
-                        {product.category}
-                      </Badge>
-                    </div>
-                    <CardTitle className="text-lg">{product.name}</CardTitle>
-                    <CardDescription className="text-sm">
-                      {product.description}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center mb-3">
-                      <div className="flex items-center">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`h-4 w-4 ${
-                              i < Math.floor(product.rating)
-                                ? "text-yellow-400 fill-current"
-                                : "text-gray-300"
-                            }`}
-                          />
-                        ))}
-                      </div>
-                      <span className="text-sm text-gray-600 ml-2">({product.rating})</span>
-                    </div>
-                    <div className="flex items-center justify-between mb-4">
-                      <div>
-                        <span className="text-2xl font-bold text-green-600">₹{product.price}</span>
-                        <span className="text-sm text-gray-500 line-through ml-2">₹{product.mrp}</span>
-                      </div>
-                      <Badge variant="secondary">Save ₹{product.mrp - product.price}</Badge>
-                    </div>
-                    <div className="flex space-x-2">
-                      <Button 
-                        size="sm" 
-                        className="flex-1 bg-green-600 hover:bg-green-700"
-                        disabled={addingToCart === product.id.toString()}
-                        onClick={() => handleAddToCart(product.id.toString(), product.name)}
-                      >
-                        {addingToCart === product.id.toString() ? (
-                          <ShoppingCart className="mr-2 h-4 w-4 animate-pulse" />
-                        ) : (
-                          <ShoppingCart className="mr-2 h-4 w-4" />
-                        )}
-                        {addingToCart === product.id.toString() ? 'Adding...' : 'Add to Cart'}
-                      </Button>
-                      <Button size="sm" variant="outline">
-                        Buy Now
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
+                <GlassmorphicProductCard key={product.id} product={{
+                  id: product.id.toString(),
+                  name: product.name,
+                  price: product.price,
+                  mrp: product.mrp,
+                  image: product.image,
+                  category: product.category,
+                  rating: product.rating,
+                  description: product.description,
+                  isNew: false
+                }} />
               ))}
             </div>
-            <div className="text-center mt-8">
-              <Button variant="outline" size="lg">
+            <div className="text-center mt-12">
+              <GlassmorphicButton variant="gradient" size="lg" className="glass-button-gradient border border-green-300">
                 View All Products
-              </Button>
+              </GlassmorphicButton>
             </div>
           </div>
         </section>
 
         {/* Categories */}
-        <section className="py-16 bg-gray-50">
+        <section className="py-16 glass-section-bg-alt">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Shop by Category</h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                Browse our extensive range of energy solutions organized by category
-              </p>
+              <GlassmorphicCard className="inline-block px-8 py-4 mb-6">
+                <h2 className="text-3xl font-bold glass-text-primary mb-2">Shop by Category</h2>
+                <p className="glass-text-secondary max-w-2xl">
+                  Browse our extensive range of energy solutions organized by category
+                </p>
+              </GlassmorphicCard>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {categories.map((category, index) => (
-                <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer">
-                  <CardContent className="p-6 text-center">
-                    <category.icon className="h-12 w-12 text-green-600 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold mb-2">{category.name}</h3>
-                    <p className="text-gray-600">{category.count} Products</p>
-                  </CardContent>
-                </Card>
+                <GlassmorphicCard key={index} className="hover:glass-hover transition-all cursor-pointer group">
+                  <div className="p-6 text-center">
+                    <div className="glass-icon-container mb-4 mx-auto">
+                      <category.icon className="h-12 w-12 text-green-600 group-hover:text-green-700 transition-colors" />
+                    </div>
+                    <h3 className="text-lg font-semibold mb-2 glass-text-primary">{category.name}</h3>
+                    <p className="glass-text-secondary text-sm font-medium">
+                      {category.count} Products
+                    </p>
+                  </div>
+                </GlassmorphicCard>
               ))}
             </div>
           </div>
         </section>
 
         {/* Benefits */}
-        <section className="py-16">
+        <section className="py-16 glass-section-bg">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Why Choose Us</h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                We provide the best energy solutions with unmatched service and support
-              </p>
+              <GlassmorphicCard className="inline-block px-8 py-4 mb-6">
+                <h2 className="text-3xl font-bold glass-text-primary mb-2">Why Choose Us</h2>
+                <p className="glass-text-secondary max-w-2xl">
+                  We provide the best energy solutions with unmatched service and support
+                </p>
+              </GlassmorphicCard>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               {benefits.map((benefit, index) => (
-                <div key={index} className="text-center">
-                  <div className="bg-green-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                    <benefit.icon className="h-8 w-8 text-green-600" />
+                <GlassmorphicCard key={index} className="text-center p-6 hover:glass-hover transition-all group">
+                  <div className="glass-icon-container-lg mb-4 mx-auto">
+                    <benefit.icon className="h-8 w-8 text-green-600 group-hover:text-green-700 transition-colors" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">{benefit.title}</h3>
-                  <p className="text-gray-600">{benefit.description}</p>
-                </div>
+                  <h3 className="text-xl font-semibold mb-3 glass-text-primary">{benefit.title}</h3>
+                  <p className="glass-text-secondary">{benefit.description}</p>
+                </GlassmorphicCard>
               ))}
             </div>
           </div>
         </section>
 
         {/* Testimonials */}
-        <section className="py-16 bg-gray-50">
+        <section className="py-16 glass-section-bg-alt">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">What Our Customers Say</h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                Join thousands of satisfied customers who trust us for their energy needs
-              </p>
+              <GlassmorphicCard className="inline-block px-8 py-4 mb-6">
+                <h2 className="text-3xl font-bold glass-text-primary mb-2">What Our Customers Say</h2>
+                <p className="glass-text-secondary max-w-2xl">
+                  Join thousands of satisfied customers who trust us for their energy needs
+                </p>
+              </GlassmorphicCard>
             </div>
             <div className="grid md:grid-cols-3 gap-8">
               {testimonials.map((testimonial, index) => (
-                <Card key={index}>
-                  <CardContent className="p-6">
-                    <div className="flex items-center mb-4">
-                      <div className="flex">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`h-4 w-4 ${
-                              i < testimonial.rating
-                                ? "text-yellow-400 fill-current"
-                                : "text-gray-300"
-                            }`}
-                          />
-                        ))}
-                      </div>
+                <GlassmorphicCard key={index} className="p-6 hover:glass-hover transition-all">
+                  <div className="flex items-center mb-4">
+                    <div className="flex">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`h-4 w-4 ${
+                            i < testimonial.rating
+                              ? "text-yellow-400 fill-current"
+                              : "text-gray-300"
+                          }`}
+                        />
+                      ))}
                     </div>
-                    <p className="text-gray-600 mb-4">"{testimonial.comment}"</p>
-                    <div className="flex items-center">
-                      <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
-                        <span className="text-green-600 font-semibold">
-                          {testimonial.name.charAt(0)}
-                        </span>
-                      </div>
-                      <div>
-                        <div className="font-semibold">{testimonial.name}</div>
-                        <div className="text-sm text-gray-500">{testimonial.location}</div>
-                      </div>
+                  </div>
+                  <p className="glass-text-secondary mb-6 italic">"{testimonial.comment}"</p>
+                  <div className="flex items-center">
+                    <GlassmorphicCard variant="subtle" className="w-12 h-12 flex items-center justify-center mr-4">
+                      <span className="text-green-600 font-semibold text-lg">
+                        {testimonial.name.charAt(0)}
+                      </span>
+                    </GlassmorphicCard>
+                    <div>
+                      <div className="font-semibold glass-text-primary">{testimonial.name}</div>
+                      <div className="text-sm glass-text-secondary">{testimonial.location}</div>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </GlassmorphicCard>
               ))}
             </div>
           </div>
         </section>
 
         {/* Newsletter */}
-        <section className="py-16 bg-green-600 text-white">
-          <div className="container mx-auto px-4">
+        <section className="py-16 glass-gradient-secondary relative overflow-hidden">
+          <div className="absolute inset-0 glass-pattern opacity-5"></div>
+          <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-2xl mx-auto text-center">
-              <h2 className="text-3xl font-bold mb-4">Stay Updated</h2>
-              <p className="text-green-100 mb-8">
-                Subscribe to our newsletter for the latest products, offers, and energy-saving tips
-              </p>
+              <GlassmorphicCard className="bg-white/10 backdrop-blur-md border border-white/20 text-white mb-8">
+                <h2 className="text-3xl font-bold mb-4">Stay Updated</h2>
+                <p className="text-green-100 mb-6">
+                  Subscribe to our newsletter for the latest products, offers, and energy-saving tips
+                </p>
+              </GlassmorphicCard>
               <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-                <Input
+                <GlassmorphicInput
                   type="email"
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="flex-1"
+                  className="flex-1 bg-white/20 border-white/30 text-white placeholder:text-white/70"
                 />
-                <Button className="bg-white text-green-600 hover:bg-green-50">
+                <GlassmorphicButton className="bg-white text-green-600 hover:bg-green-50 shadow-xl">
                   Subscribe
-                </Button>
+                </GlassmorphicButton>
               </div>
             </div>
           </div>

@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { ShoppingCart, Search, User, Heart, Menu, X, Leaf, Smartphone, Package, Settings } from "lucide-react"
 import { useCart } from "@/contexts/cart-context"
+import { ThemeToggle, AnimatedThemeToggle } from "@/components/ui/theme-toggle"
 
 export default function Header() {
   const pathname = usePathname()
@@ -36,9 +37,9 @@ export default function Header() {
   }
 
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-50">
+    <header className="bg-white dark:bg-gray-900 sticky top-0 z-50 border-b border-gray-200 dark:border-gray-800 shadow-sm">
       {/* Top Bar */}
-      <div className="bg-green-600 text-white py-2">
+      <div className="bg-gradient-to-r from-green-500 to-green-600 text-white py-2">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between text-sm">
             <div className="hidden md:flex items-center space-x-6">
@@ -60,8 +61,8 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <Leaf className="h-8 w-8 text-green-600" />
-            <span className="text-xl font-bold text-green-800">Green Energy Solutions</span>
+            <Leaf className="h-8 w-8 text-green-600 dark:text-green-400" />
+            <span className="text-xl font-bold text-green-800 dark:text-green-200">Green Energy Solutions</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -70,8 +71,8 @@ export default function Header() {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`text-gray-700 hover:text-green-600 transition-colors ${
-                  isActive(item.href) ? 'text-green-600 font-medium' : ''
+                className={`text-gray-700 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 transition-colors ${
+                  isActive(item.href) ? 'text-green-600 dark:text-green-400 font-medium' : ''
                 }`}
               >
                 {item.name}
@@ -136,6 +137,8 @@ export default function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
 
+            <ThemeToggle />
+
             <Button variant="ghost" size="icon">
               <Heart className="h-5 w-5" />
             </Button>
@@ -165,7 +168,7 @@ export default function Header() {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden bg-white border-t py-4">
+          <div className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 py-4">
             <div className="space-y-4">
               {/* Mobile Search */}
               <div className="px-4">
@@ -187,8 +190,8 @@ export default function Header() {
                   <Link
                     key={item.name}
                     href={item.href}
-                    className={`block px-3 py-2 rounded-md text-gray-700 hover:text-green-600 hover:bg-gray-50 ${
-                      isActive(item.href) ? 'text-green-600 bg-green-50 font-medium' : ''
+                    className={`block px-3 py-2 rounded-md text-gray-700 dark:text-gray-200 hover:text-green-600 dark:hover:text-green-400 hover:bg-gray-50 dark:hover:bg-gray-800 ${
+                      isActive(item.href) ? 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 font-medium' : ''
                     }`}
                     onClick={() => setIsMenuOpen(false)}
                   >
@@ -232,6 +235,11 @@ export default function Header() {
                   <Heart className="h-5 w-5" />
                   <span className="text-xs">Wishlist</span>
                 </Button>
+                
+                <div className="flex-col items-center gap-1">
+                  <AnimatedThemeToggle className="scale-75" />
+                  <span className="text-xs text-gray-600 dark:text-gray-300">Theme</span>
+                </div>
                 
                 <Button variant="ghost" size="sm" className="flex-col gap-1 relative" asChild>
                   <Link href="/cart" onClick={() => setIsMenuOpen(false)}>
