@@ -4,6 +4,7 @@ import { db } from '@/lib/db'
 import bcrypt from 'bcryptjs'
 
 export const authOptions = {
+  debug: process.env.NODE_ENV === 'development',
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -86,9 +87,11 @@ export const authOptions = {
   },
   pages: {
     signIn: '/auth/signin',
-    signUp: '/auth/signup'
+    signUp: '/auth/signup',
+    error: '/auth/error'
   },
-  secret: process.env.NEXTAUTH_SECRET
+  secret: process.env.NEXTAUTH_SECRET,
+  trustHost: true
 }
 
 const handler = NextAuth(authOptions)
