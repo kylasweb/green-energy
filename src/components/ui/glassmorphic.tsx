@@ -90,8 +90,7 @@ const GlassmorphicButton = React.forwardRef<HTMLButtonElement, GlassmorphicButto
 GlassmorphicButton.displayName = "GlassmorphicButton"
 
 // Glassmorphic Input Component
-export interface GlassmorphicInputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {}
+export type GlassmorphicInputProps = React.InputHTMLAttributes<HTMLInputElement>
 
 const GlassmorphicInput = React.forwardRef<HTMLInputElement, GlassmorphicInputProps>(
   ({ className, type, ...props }, ref) => {

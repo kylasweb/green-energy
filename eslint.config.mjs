@@ -19,6 +19,7 @@ const eslintConfig = [
       "@typescript-eslint/no-non-null-assertion": "off",
       "@typescript-eslint/ban-ts-comment": "off",
       "@typescript-eslint/prefer-as-const": "off",
+      "@typescript-eslint/no-empty-object-type": "off",
       
       // React 相关规则
       "react-hooks/exhaustive-deps": "off",
@@ -44,6 +45,12 @@ const eslintConfig = [
       "no-undef": "off",
       "no-unreachable": "off",
       "no-useless-escape": "off",
+    },
+  },
+  {
+    files: ["scripts/**/*.js"],
+    rules: {
+      "@typescript-eslint/no-require-imports": "off",
     },
   },
 ];
